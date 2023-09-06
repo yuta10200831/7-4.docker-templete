@@ -1,4 +1,5 @@
 <?php
+
 $dbUserName = 'root';
 $dbPassword = 'password';
 $pdo = new PDO(
@@ -7,22 +8,8 @@ $pdo = new PDO(
     $dbPassword
 );
 
-// 検索機能
-$searchQuery = '';
-$whereClause = '';
-
-if (isset($_GET['searchQuery']) && $_GET['searchQuery'] !== '') {
-    $searchQuery = $_GET['searchQuery'];
-    $whereClause = ' WHERE title LIKE :searchQuery OR content LIKE :searchQuery';
-}
-
-$sql = 'SELECT * FROM books' . $whereClause;
+$sql = 'SELECT * FROM books';
 $statement = $pdo->prepare($sql);
-
-if ($whereClause !== '') {
-    $statement->bindValue(':searchQuery', '%' . $searchQuery . '%');
-}
-
 $statement->execute();
 $pages = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -51,7 +38,7 @@ array_multisort($standard_key_array, SORT_DESC, $pages);
       <?php foreach ($pages as $page): ?>
         <tr>
           <td><?php echo $page['title']; ?></td>
-          <td><?php echo $page['content']; ?></td>
+          <td><?php echo $page['impressions']; ?></td>
           <!-- 表示変更 -->
           <td><?php echo date('Y年m月d日H時i分s秒', strtotime($page['created_at'])); ?></td>
           <td><a href="edit.php?id=<?php echo $page['id']; ?>">編集</a></td>
