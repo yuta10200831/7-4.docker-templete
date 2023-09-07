@@ -1,4 +1,5 @@
 <?php
+
 $dbUserName = 'root';
 $dbPassword = 'password';
 $pdo = new PDO(
